@@ -1,0 +1,144 @@
+/* Design tokens copied from roqua/frontend/packages/components/src/styles/globals.css */
+:root {
+  --page: oklch(0.95 0.0034 247.86);
+  --background: oklch(1 0 0);
+  --border: oklch(0.9 0.013 255.5);
+  --foreground: oklch(0.21 0.04 266);
+  --muted-foreground: hsl(215.4 16.3% 46.9%);
+  --primary: oklch(0.454 0.135 254);
+  --primary-hover: oklch(0.5 0.16 254);
+  --hero: oklch(0.68 0.16 254);
+  --accent-foreground: hsl(222.2 47.4% 11.2%);
+  --radius: 0.5rem;
+}
+
+* {
+  box-sizing: border-box;
+  border-color: var(--border);
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.5;
+  background: var(--page);
+  color: var(--foreground);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Header (PageHeader primitive: h-16, bg-foreground, text-background) */
+.epd-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  padding: 0.5rem 1rem;
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.epd-header__left,
+.epd-header__right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.epd-header__right {
+  justify-content: flex-end;
+}
+
+.epd-header__logo {
+  height: 4rem;
+  width: 8rem;
+}
+
+@media (max-width: 768px) {
+  .epd-header__logo {
+    display: none;
+  }
+}
+
+/* DossierInfo */
+.dossier-info {
+  display: flex;
+  align-items: center;
+  border-radius: calc(var(--radius) - 2px);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.dossier-info__icon {
+  display: flex;
+  padding: 0.5rem;
+  border-radius: calc(var(--radius) - 2px) 0 0 calc(var(--radius) - 2px);
+  background: var(--hero);
+}
+
+.dossier-info__lines {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.5rem;
+  white-space: nowrap;
+}
+
+.dossier-info__meta {
+  font-weight: 300;
+  color: var(--muted-foreground);
+}
+
+.dossier-info__buttons {
+  display: flex;
+  align-items: center;
+  margin: 0 0.5rem;
+}
+
+/* Buttons (subset of @roqua/components/ui/button variants) */
+.epd-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.5rem;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: calc(var(--radius) - 2px);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 200ms, border-color 200ms, background-color 200ms;
+}
+
+.epd-button--outline {
+  border: 2px solid var(--primary);
+  background: var(--background);
+  color: var(--primary);
+}
+
+.epd-button--outline:hover {
+  border-color: var(--accent-foreground);
+  color: var(--accent-foreground);
+}
+
+.epd-button--hero-round {
+  height: auto;
+  padding: 0.5rem;
+  margin: 0 0.5rem;
+  border-radius: 9999px;
+  background: var(--hero);
+  color: var(--foreground);
+}
+
+.epd-button--hero-round:hover {
+  background: var(--primary);
+  color: var(--background);
+}

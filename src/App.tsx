@@ -1,8 +1,13 @@
 import "./index.css";
+import { EpdLayout } from "./epd-layout/EpdLayout";
 import { Interview } from "./Interview";
 
 export function App() {
-  return <Interview />;
+  return (
+    <EpdLayout>
+      <Interview />
+    </EpdLayout>
+  );
 }
 
 export default App;
