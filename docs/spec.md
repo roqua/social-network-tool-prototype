@@ -17,8 +17,8 @@ description such as "buurvrouw"). Carries the answers to the protocol's
 questions about that person (relationship type, contact frequency, the
 perception statements, material support) and a position on the sociogram.
 Has a regular primary key and a UUID; see duplication below for why both.
-The client is not a node: the network is about them. (To confirm; Network
-Canvas also leaves ego out of the sociogram.)
+The client is not a node: the network is about them, as in Network Canvas,
+which leaves ego out of the sociogram too.
 
 **Edge**:
 An undirected tie between two nodes of the same network, answering "wie heeft
@@ -34,9 +34,9 @@ is an open question.
   same dossier. Nodes and edges are copied. Copied nodes keep the UUID of
   their original and get a fresh primary key.
 
-The UUID therefore identifies the same person across successive networks of
-one dossier, so change over time can be followed; the primary key identifies a
-row in one network.
+The UUID identifies the same person across successive networks of one
+dossier, so change over time can be followed; the primary key identifies a row
+in one network.
 
 ## Interaction decisions
 
