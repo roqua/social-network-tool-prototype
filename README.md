@@ -31,15 +31,12 @@ bun dev
 ## What to look at
 
 Stages 2 to 11 all have the same shape: sort every person into one of a few
-columns. The prototype has three interaction designs for that, switchable with
-the floating bar at the bottom, the ← / → keys, or `?variant=`:
-
-- **A** — drag people into columns, the Network Canvas way. People are sorted
-  one by one: only the first in the queue can be dragged. Clicking a column or
-  pressing its number (1-9, 0 for the tenth) places that person too.
-- **B** — one person at a time, answered with buttons or the same number
-  hotkeys. Picking an answer jumps to the next person who has none yet.
-- **C** — a table with a row per person and a radio button per option.
+columns, the Network Canvas way. People are sorted one by one: only the first
+in the queue can be dragged. Clicking a column or pressing its number (1-9, 0
+for the tenth) places that person too, which is what Network Canvas' mouse-only
+version lacked. The prototype started with two more designs for this (one
+person at a time, and a table); they were dropped once the intake settled on
+columns as a requirement.
 
 Name entry and the sociogram have one design each. On the sociogram, drag to
 move, click two people in turn to toggle a tie, Tab to a person and use the

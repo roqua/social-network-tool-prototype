@@ -1,15 +1,14 @@
 // PROTOTYPE of the social network interview tool for the EPD.
-// Three variants of the "sort members into columns" stages, switchable via
-// ?variant=A|B|C and the floating bar. Name entry and the sociogram have one
-// design each. All state lives in memory; reloading the page starts over.
+// Members are sorted into columns the Network Canvas way; name entry and the
+// sociogram have one design each. All state lives in memory; reloading the
+// page starts over.
 
 import { useState } from "react";
 import { stages, type Stage } from "./protocol";
 import { demoNetwork, emptyNetwork, stageProgress, tieKey, type AttributeValue, type Network } from "./network";
 import { useSearchParam } from "./useSearchParam";
-import { PrototypeSwitcher } from "./PrototypeSwitcher";
 import { NameGenerator } from "./stages/NameGenerator";
-import { BinStage, binVariants } from "./stages/BinStage";
+import { BinDragColumns } from "./stages/BinDragColumns";
 import { Sociogram } from "./stages/Sociogram";
 
 export type NetworkActions = {
@@ -24,7 +23,6 @@ export type NetworkActions = {
 export function Interview() {
   const [network, setNetwork] = useState<Network>(emptyNetwork);
   const [stageParam, setStageParam] = useSearchParam("stage", "0");
-  const [variant, setVariant] = useSearchParam("variant", "A");
   const stageIndex = Math.min(Math.max(0, Number(stageParam) || 0), stages.length - 1);
   const stage: Stage = stages[stageIndex]!;
 
@@ -101,7 +99,7 @@ export function Interview() {
             onLoadDemo={() => setNetwork(demoNetwork)}
           />
         )}
-        {stage.type === "bins" && <BinStage key={stage.id} stage={stage} network={network} actions={actions} variant={variant} />}
+        {stage.type === "bins" && <BinDragColumns key={stage.id} stage={stage} network={network} actions={actions} />}
         {stage.type === "sociogram" && <Sociogram stage={stage} network={network} actions={actions} />}
 
         <footer className="stage-nav">
@@ -123,7 +121,6 @@ export function Interview() {
         </footer>
       </main>
 
-      <PrototypeSwitcher variants={binVariants} current={variant} onChange={setVariant} />
     </div>
   );
 }
