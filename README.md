@@ -49,6 +49,9 @@ is the same data without the canvas.
 "Voorbeeldnamen laden" on the first stage fills in five names to skip typing.
 The "Data" panel at the bottom of the sidebar shows the network as JSON.
 
+`/vragen` lists the open questions for the researcher, with links into the
+relevant steps, so the prototype and the questions travel as one link.
+
 ## Deploy
 
 Static build to `dist/`, served by Vercel (`vercel.json`): `bun run build`.

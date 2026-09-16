@@ -40,6 +40,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 .step-progress.complete { color: var(--ok); }
 .state-panel { margin-top: auto; font-size: 0.75rem; color: var(--muted); }
 .state-panel pre { max-height: 40vh; overflow: auto; background: var(--bg); padding: 0.5rem; border-radius: 6px; }
+.sidebar-link { font-size: 0.8rem; color: var(--accent); padding: 0 0.5rem; }
 
 .stage { padding: 2rem 2.5rem 6rem; display: flex; flex-direction: column; gap: 1.5rem; max-width: 1200px; }
 .stage > section { display: flex; flex-direction: column; gap: 1rem; }
@@ -142,3 +143,16 @@ kbd {
   display: flex; align-items: center; gap: 0.75rem; box-shadow: 0 8px 24px rgba(0,0,0,0.25); font-size: 0.9rem; z-index: 10;
 }
 .switcher button { background: #374151; color: #fff; border: 0; border-radius: 50%; width: 2rem; height: 2rem; }
+
+/* Open questions page ---------------------------------------------------- */
+.questions { max-width: 46rem; margin: 0 auto; padding: 2rem 2.5rem 6rem; display: flex; flex-direction: column; gap: 1rem; }
+.questions h1 { font-size: 1.5rem; }
+.questions .back { color: var(--accent); font-size: 0.9rem; }
+.questions ol { margin: 0.5rem 0 0; padding-left: 1.5rem; display: grid; gap: 1.5rem; }
+.questions li { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; }
+.questions li::marker { color: var(--muted); font-size: 0.9rem; }
+.questions h2 { font-size: 1.05rem; margin-bottom: 0.4rem; }
+.questions p { margin: 0 0 0.5rem; }
+.questions .ask { font-weight: 500; }
+.questions .links { display: flex; gap: 0.75rem; margin: 0; }
+.questions .links a { color: var(--accent); font-size: 0.9rem; }

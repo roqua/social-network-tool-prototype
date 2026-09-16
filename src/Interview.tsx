@@ -87,6 +87,9 @@ export function Interview() {
           <summary>Data ({network.members.length} personen, {network.ties.length} verbindingen)</summary>
           <pre>{JSON.stringify(network, null, 1)}</pre>
         </details>
+        <a className="sidebar-link" href="/vragen" target="_blank" rel="noreferrer">
+          Open vragen voor de onderzoeker →
+        </a>
       </nav>
 
       <main className="stage">
