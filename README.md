@@ -43,7 +43,9 @@ move, click two people in turn to toggle a tie, Tab to a person and use the
 arrow keys and Enter for the same without a mouse. The list under the canvas
 is the same data without the canvas.
 
-"Voorbeeldnamen laden" on the first stage fills in five names to skip typing.
+The interview starts with five example names so every step is usable right
+away; remove them on the first stage to start from scratch, and "Voorbeeldnamen
+laden" brings them back.
 The "Data" panel at the bottom of the sidebar shows the network as JSON.
 
 `/vragen` lists the open questions for the researcher, with links into the

@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import { stages, type Stage } from "./protocol";
-import { demoNetwork, emptyNetwork, stageProgress, tieKey, type AttributeValue, type Network } from "./network";
+import { demoNetwork, stageProgress, tieKey, type AttributeValue, type Network } from "./network";
 import { useSearchParam } from "./useSearchParam";
 import { NameGenerator } from "./stages/NameGenerator";
 import { BinDragColumns } from "./stages/BinDragColumns";
@@ -21,7 +21,8 @@ export type NetworkActions = {
 };
 
 export function Interview() {
-  const [network, setNetwork] = useState<Network>(emptyNetwork);
+  // Start with example names so every step is usable without typing first.
+  const [network, setNetwork] = useState<Network>(demoNetwork);
   const [stageParam, setStageParam] = useSearchParam("stage", "0");
   const stageIndex = Math.min(Math.max(0, Number(stageParam) || 0), stages.length - 1);
   const stage: Stage = stages[stageIndex]!;
