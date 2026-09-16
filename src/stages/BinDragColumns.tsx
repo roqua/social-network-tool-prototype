@@ -1,8 +1,9 @@
-// Variant A: mirrors Network Canvas. People are sorted one by one: only the
-// first person in the queue can be dragged into a column, the rest wait
-// dimmed behind them. Because there is always exactly one active person, the
-// columns can have number hotkeys and can simply be clicked.
-import type { DragEvent } from "react";
+// Mirrors Network Canvas. People are sorted one by one: only the first person
+// in the queue can be dragged into a column, the rest wait dimmed behind them.
+// Because there is always exactly one active person, the columns can have
+// number hotkeys and can simply be clicked. Clicking a name that is already
+// sorted selects it instead, so the same column click or hotkey re-sorts it.
+import { useState, type DragEvent, type KeyboardEvent, type MouseEvent } from "react";
 import { OTHER, type Member } from "../network";
 import type { BinStageProps } from "./BinStage";
 import { hotkeyLabel, useNumberHotkeys } from "../useNumberHotkeys";
@@ -15,11 +16,18 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
     ...(prompt.other ? [{ value: OTHER as typeof OTHER, label: prompt.other.label }] : []),
   ];
   const queue = network.members.filter((m) => m.attributes[prompt.variable] === undefined);
-  const active = queue[0];
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selected = network.members.find((m) => m.id === selectedId);
+  const active = selected ?? queue[0];
 
   const place = (memberId: string, value: number | typeof OTHER | undefined) => {
     actions.setAttribute(memberId, prompt.variable, value);
     if (value !== OTHER && prompt.other) actions.setAttribute(memberId, prompt.other.commentVariable, undefined);
+    setSelectedId(null);
+  };
+  const toggleSelected = (e: MouseEvent | KeyboardEvent, id: string) => {
+    e.stopPropagation(); // the column underneath would otherwise place the active person
+    setSelectedId((current) => (current === id ? null : id));
   };
 
   useNumberHotkeys(bins.length, (index) => active && place(active.id, bins[index]!.value));
@@ -32,13 +40,25 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
     },
   });
 
-  const chip = (m: Member, draggable = true) => (
+  const chip = (m: Member, { draggable = true, placed = false } = {}) => (
     <span
       key={m.id}
-      className={`chip ${draggable ? "" : "dimmed"}`}
+      className={`chip ${draggable ? "" : "dimmed"} ${m.id === selectedId ? "selected" : ""}`}
       draggable={draggable}
       onDragStart={(e) => e.dataTransfer.setData("text/plain", m.id)}
       aria-disabled={!draggable}
+      {...(placed && {
+        role: "button",
+        tabIndex: 0,
+        "aria-pressed": m.id === selectedId,
+        onClick: (e: MouseEvent) => toggleSelected(e, m.id),
+        onKeyDown: (e: KeyboardEvent) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleSelected(e, m.id);
+          }
+        },
+      })}
     >
       {m.name}
     </span>
@@ -49,12 +69,19 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
       <p className="prompt">{prompt.text}</p>
 
       <div className={`tray ${queue.length === 0 ? "empty" : ""}`} {...dropHandlers(undefined)}>
-        {queue.length === 0 ? <span className="hint">Iedereen is ingedeeld.</span> : queue.map((m, i) => chip(m, i === 0))}
+        {queue.length === 0 ? <span className="hint">Iedereen is ingedeeld.</span> : queue.map((m, i) => chip(m, { draggable: i === 0 }))}
       </div>
-      {active && (
+      {selected ? (
         <p className="hint">
-          Sleep <strong>{active.name}</strong> naar een kolom, klik op de kolom, of druk op het cijfer van de kolom.
+          <strong>{selected.name}</strong> is geselecteerd. Klik op een andere kolom of druk op het cijfer om te
+          verplaatsen; klik nog eens op de naam om te annuleren.
         </p>
+      ) : (
+        active && (
+          <p className="hint">
+            Sleep <strong>{active.name}</strong> naar een kolom, klik op de kolom, of druk op het cijfer van de kolom.
+          </p>
+        )
       )}
 
       <div className="columns" style={{ gridTemplateColumns: `repeat(${bins.length}, minmax(0, 1fr))` }}>
@@ -76,7 +103,7 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
               <div className="column-body">
                 {inBin.map((m) => (
                   <div key={m.id} className="column-member">
-                    {chip(m)}
+                    {chip(m, { placed: true })}
                     {bin.value === OTHER && prompt.other && (
                       <input
                         className="comment"
