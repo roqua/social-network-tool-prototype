@@ -10,6 +10,7 @@ import type { NetworkActions } from "../Interview";
 const W = 1000;
 const H = 640;
 const R = 28;
+const DRAG_THRESHOLD = 4; // screen pixels
 
 // Where a person lands when placed without dragging: spread around the centre
 // so successive placements don't stack.
@@ -29,7 +30,10 @@ export function Sociogram({
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [selected, setSelected] = useState<string | null>(null);
-  const drag = useRef<{ id: string; moved: boolean } | null>(null);
+  // A press becomes a drag only after the pointer travels DRAG_THRESHOLD
+  // pixels; anything less is a click. Dragging moves the node by the pointer's
+  // delta from where it was grabbed, so it keeps its offset under the cursor.
+  const drag = useRef<{ id: string; startX: number; startY: number; origin: { x: number; y: number }; moved: boolean } | null>(null);
   const [pair, setPair] = useState<{ from: string; to: string }>({ from: "", to: "" });
 
   const placed = network.members.filter((m): m is Member & { position: { x: number; y: number } } => !!m.position);
@@ -37,20 +41,29 @@ export function Sociogram({
   const byId = (id: string) => network.members.find((m) => m.id === id);
 
   // Convert a screen point to normalised canvas coordinates.
-  const toCanvas = (clientX: number, clientY: number) => {
+  const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+  const project = (clientX: number, clientY: number) => {
     const svg = svgRef.current!;
     const pt = new DOMPoint(clientX, clientY).matrixTransform(svg.getScreenCTM()!.inverse());
-    return { x: Math.min(1, Math.max(0, pt.x / W)), y: Math.min(1, Math.max(0, pt.y / H)) };
+    return { x: pt.x / W, y: pt.y / H };
+  };
+  const toCanvas = (clientX: number, clientY: number) => {
+    const { x, y } = project(clientX, clientY);
+    return { x: clamp01(x), y: clamp01(y) };
   };
 
-  const onPointerDown = (e: PointerEvent, id: string) => {
-    drag.current = { id, moved: false };
+  const onPointerDown = (e: PointerEvent, m: Member & { position: { x: number; y: number } }) => {
+    drag.current = { id: m.id, startX: e.clientX, startY: e.clientY, origin: m.position, moved: false };
     (e.currentTarget as Element).setPointerCapture(e.pointerId);
   };
   const onPointerMove = (e: PointerEvent) => {
-    if (!drag.current) return;
-    drag.current.moved = true;
-    actions.setPosition(drag.current.id, toCanvas(e.clientX, e.clientY));
+    const d = drag.current;
+    if (!d) return;
+    if (!d.moved && Math.hypot(e.clientX - d.startX, e.clientY - d.startY) < DRAG_THRESHOLD) return;
+    d.moved = true;
+    const start = project(d.startX, d.startY);
+    const now = project(e.clientX, e.clientY);
+    actions.setPosition(d.id, { x: clamp01(d.origin.x + now.x - start.x), y: clamp01(d.origin.y + now.y - start.y) });
   };
   const onPointerUp = () => {
     if (drag.current && !drag.current.moved) clickNode(drag.current.id);
@@ -106,7 +119,7 @@ export function Sociogram({
             tabIndex={0}
             role="button"
             aria-label={m.name}
-            onPointerDown={(e) => onPointerDown(e, m.id)}
+            onPointerDown={(e) => onPointerDown(e, m)}
             onKeyDown={(e) => {
               const step = 0.02;
               if (e.key === "ArrowLeft") nudge(m, -step, 0);
