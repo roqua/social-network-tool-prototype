@@ -1,11 +1,13 @@
 // PROTOTYPE of the social network interview tool for the EPD.
 // Members are sorted into columns the Network Canvas way; name entry and the
-// sociogram have one design each. All state lives in memory; reloading the
-// page starts over.
+// sociogram have one design each. A final network shows the same steps
+// read-only; the actions become no-ops and the stage ignores the pointer.
 
-import { useState } from "react";
 import { stages, type Stage } from "./protocol";
-import { demoNetwork, stageProgress, tieKey, type AttributeValue, type Network } from "./network";
+import { stageProgress, tieKey, type AttributeValue, type Network, type SocialNetwork } from "./network";
+import { exampleNames, membersFromNames } from "./demo";
+import { Link, navigate } from "./navigation";
+import { StatusBadge } from "./NetworkIndex";
 import { useSearchParam } from "./useSearchParam";
 import { NameGenerator } from "./stages/NameGenerator";
 import { BinDragColumns } from "./stages/BinDragColumns";
@@ -20,14 +22,21 @@ export type NetworkActions = {
   toggleTie: (a: string, b: string) => void;
 };
 
-export function Interview() {
-  // Start with example names so every step is usable without typing first.
-  const [network, setNetwork] = useState<Network>(demoNetwork);
+export function Interview({
+  network,
+  onChange,
+}: {
+  network: SocialNetwork;
+  onChange: (fn: (n: SocialNetwork) => SocialNetwork) => void;
+}) {
+  const readOnly = network.status === "final";
   const [stageParam, setStageParam] = useSearchParam("stage", "0");
   const stageIndex = Math.min(Math.max(0, Number(stageParam) || 0), stages.length - 1);
   const stage: Stage = stages[stageIndex]!;
 
-  const update = (fn: (n: Network) => Network) => setNetwork(fn);
+  const update = (fn: (n: Network) => Network) => {
+    if (!readOnly) onChange((n) => ({ ...n, ...fn(n) }));
+  };
   const updateMember = (id: string, fn: (m: Network["members"][number]) => Network["members"][number]) =>
     update((n) => ({ ...n, members: n.members.map((m) => (m.id === id ? fn(m) : m)) }));
 
@@ -64,7 +73,12 @@ export function Interview() {
   return (
     <div className="shell">
       <nav className="sidebar" aria-label="Interviewstappen">
-        <h1>Sociaal netwerk</h1>
+        <Link to="/" className="sidebar-link">
+          ← Alle netwerken
+        </Link>
+        <h1>
+          {network.name} <StatusBadge network={network} />
+        </h1>
         <ol>
           {stages.map((s, i) => {
             const { done, total } = stageProgress(network, s);
@@ -91,13 +105,19 @@ export function Interview() {
         </a>
       </nav>
 
-      <main className="stage">
+      <main className={`stage ${readOnly ? "readonly" : ""}`}>
+        {readOnly && (
+          <p className="readonly-banner">
+            Dit netwerk is definitief en kan niet meer gewijzigd worden.{" "}
+            <Link to={`/nieuw?van=${network.id}`}>Dupliceer het</Link> om verder te werken aan een kopie.
+          </p>
+        )}
         {stage.type === "names" && (
           <NameGenerator
             stage={stage}
             network={network}
             actions={actions}
-            onLoadDemo={() => setNetwork(demoNetwork)}
+            onLoadDemo={() => update((n) => ({ ...n, members: membersFromNames(exampleNames), ties: [] }))}
           />
         )}
         {stage.type === "bins" && <BinDragColumns key={stage.id} stage={stage} network={network} actions={actions} />}
@@ -115,8 +135,8 @@ export function Interview() {
               Volgende →
             </button>
           ) : (
-            <button className="primary" onClick={() => alert("Prototype: hier zou het netwerk opgeslagen worden.")}>
-              Afronden
+            <button className="primary" onClick={() => navigate("/")}>
+              {readOnly ? "Terug naar overzicht" : "Afronden"}
             </button>
           )}
         </footer>

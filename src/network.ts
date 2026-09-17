@@ -16,16 +16,31 @@ export type Tie = { from: string; to: string };
 
 export type Network = { members: Member[]; ties: Tie[] };
 
-export const emptyNetwork: Network = { members: [], ties: [] };
-
-export const demoNetwork: Network = {
-  members: ["Henk", "Tom", "Dennis", "Marie", "Herman"].map((name) => ({
-    id: name.toLowerCase(),
-    name,
-    attributes: {},
-  })),
-  ties: [],
+// One inventory of the client's network, as listed on the index page. It
+// stays editable until it is marked final; a final network is read-only and
+// is what Petra offers to choose from. To change a final network, duplicate
+// it into a new draft.
+export type SocialNetwork = Network & {
+  id: string;
+  name: string;
+  status: "draft" | "final";
+  createdAt: string;
+  finalizedAt?: string;
 };
+
+export function createNetwork(name: string): SocialNetwork {
+  return { id: `n${Date.now().toString(36)}`, name, status: "draft", createdAt: new Date().toISOString(), members: [], ties: [] };
+}
+
+// Members keep their id in the copy, so the same person can be followed
+// across successive networks of one dossier.
+export function duplicateNetwork(source: SocialNetwork, name: string): SocialNetwork {
+  return { ...createNetwork(name), members: structuredClone(source.members), ties: structuredClone(source.ties) };
+}
+
+export function finalizeNetwork(network: SocialNetwork): SocialNetwork {
+  return { ...network, status: "final", finalizedAt: new Date().toISOString() };
+}
 
 export function hasAnswer(member: Member, prompt: Prompt): boolean {
   return member.attributes[prompt.variable] !== undefined;

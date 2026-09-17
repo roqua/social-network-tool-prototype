@@ -2,7 +2,13 @@
 
 Throwaway UI prototype for the social network inventory tool that will go into
 the RoQua EPD app. No backend, no persistence: everything lives in memory and a
-page reload starts over.
+page reload brings back the example networks.
+
+The index at `/` lists the dossier's networks. A network stays editable
+("Concept") until it is made final; a final network is read-only, is what
+Petra will offer to choose from, and can only be duplicated into a new draft.
+A new network starts by giving it a name (`/nieuw`); duplicating goes through
+the same page. The interview itself lives at `/netwerk/:id`.
 
 The interview follows the researcher's Network Canvas protocol in
 `docs/Case studies network survey (1).netcanvas` (a zip with a `protocol.json`),
@@ -43,9 +49,9 @@ move, click two people in turn to toggle a tie, Tab to a person and use the
 arrow keys and Enter for the same without a mouse. The list under the canvas
 is the same data without the canvas.
 
-The interview starts with five example names so every step is usable right
-away; remove them on the first stage to start from scratch, and "Voorbeeldnamen
-laden" brings them back.
+The example data has two final networks, fully answered, and one draft with
+five names and nothing else. A new network starts empty; "Voorbeeldnamen
+laden" on the first stage fills in the five names.
 The "Data" panel at the bottom of the sidebar shows the network as JSON.
 
 `/vragen` lists the open questions for the researcher, with links into the

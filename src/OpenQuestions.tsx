@@ -15,28 +15,28 @@ const questions: Question[] = [
     context:
       "In Network Canvas verschijnt na het slepen naar “Anders ...” een venster met de vraag “Wil je een opmerking toevoegen aan deze persoon?”. Dat leest als een optionele, algemene opmerking, maar het antwoord is verplicht en komt in het veld comment terecht.",
     ask: "Is de bedoeling hier “welke relatie is het dan?” Zo ja, mogen we de vraag zo formuleren?",
-    links: [{ label: "Bekijk stap 2", href: "/?stage=1" }],
+    links: [{ label: "Bekijk stap 2", href: "/netwerk/evaluatie-6-maanden?stage=1" }],
   },
   {
     title: "Schaal van “Emotionele steun” (stap 7)",
     context:
       "In het codeboek loopt deze vraag van 1 (Nooit) tot 5 (Bijna altijd). Alle andere frequentievragen lopen van 0 tot 4. Hetzelfde antwoord “Nooit” is daardoor bij de ene vraag een 0 en bij de andere een 1.",
     ask: "Is dat bewust, of mogen we alle frequentieschalen gelijktrekken naar 0 tot 4?",
-    links: [{ label: "Bekijk stap 7", href: "/?stage=6" }],
+    links: [{ label: "Bekijk stap 7", href: "/netwerk/evaluatie-6-maanden?stage=6" }],
   },
   {
     title: "Wie bedient het scherm?",
     context:
       "Personen worden gesorteerd door ze in kolommen te slepen, zoals in Network Canvas. Het prototype voegt daar klikken op een kolom en de cijfertoetsen aan toe.",
     ask: "Vult de behandelaar het samen met de cliënt in, of bedient de cliënt het zelf? Dat bepaalt hoe zwaar slepen en aanraken wegen ten opzichte van het toetsenbord.",
-    links: [{ label: "Bekijk stap 2", href: "/?stage=1" }],
+    links: [{ label: "Bekijk stap 2", href: "/netwerk/evaluatie-6-maanden?stage=1" }],
   },
   {
     title: "Cirkels op het sociogram (stap 12)",
     context:
       "Network Canvas toont op de achtergrond van het sociogram tien concentrische cirkels. Het prototype tekent die nu niet, maar slaat de positie van elke persoon wel op.",
     ask: "Betekenen de cirkels iets (bijvoorbeeld nabijheid tot de cliënt in het midden) en wordt de positie geanalyseerd? Of zijn ze alleen een hulpmiddel bij het neerleggen?",
-    links: [{ label: "Bekijk stap 12", href: "/?stage=11" }],
+    links: [{ label: "Bekijk stap 12", href: "/netwerk/evaluatie-6-maanden?stage=11" }],
   },
   {
     title: "Wat een verbinding betekent (stap 12)",
@@ -50,7 +50,7 @@ export function OpenQuestions() {
   return (
     <main className="questions">
       <a href="/" className="back">
-        ← Terug naar het interview
+        ← Terug naar het overzicht
       </a>
       <h1>Open vragen</h1>
       <p className="hint">
