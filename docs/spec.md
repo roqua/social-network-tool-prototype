@@ -27,12 +27,15 @@ is an open question.
 
 ## Lifecycle
 
+- A social network is created by giving it a **name**, chosen by the
+  professional (for example the moment in the treatment). The name is what
+  the index and Petra show.
 - A social network starts editable and stays so until it is marked **final**.
 - A final network is read-only. It becomes available to choose in Petra (a
   research project; its custom frontend selects a final network to work with).
 - A final network can be **duplicated** into a new, editable network on the
-  same dossier. Nodes and edges are copied. Copied nodes keep the UUID of
-  their original and get a fresh primary key.
+  same dossier. The copy gets its own name. Nodes and edges are copied.
+  Copied nodes keep the UUID of their original and get a fresh primary key.
 
 The UUID identifies the same person across successive networks of one
 dossier, so change over time can be followed; the primary key identifies a row
