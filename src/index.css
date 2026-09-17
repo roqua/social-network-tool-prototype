@@ -75,9 +75,17 @@ input[type="text"], input:not([type]), textarea, select {
 /* Name generator --------------------------------------------------------- */
 .name-form { display: flex; gap: 0.5rem; max-width: 520px; }
 .name-form input { flex: 1; font-size: 1.1rem; }
-.member-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-.member-list li { display: flex; align-items: center; gap: 0.25rem; }
-.member-list input { flex: 1; }
+.member-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.35rem; max-width: 520px; }
+.member-list li {
+  display: flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 6px; cursor: grab;
+}
+.member-list li.drag-over { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.member-list .grip { color: var(--muted); flex: none; }
+.member-list .member-index { width: 1.5rem; text-align: center; font-size: 0.8rem; color: var(--muted); flex: none; }
+.member-list input { flex: 1; border-color: transparent; }
+.member-list input:focus { border-color: var(--border); }
+.member-list button.icon:disabled { opacity: 0.25; }
 
 /* Chips (people) --------------------------------------------------------- */
 .chip {

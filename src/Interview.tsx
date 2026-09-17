@@ -17,6 +17,9 @@ export type NetworkActions = {
   addMember: (name: string) => void;
   renameMember: (id: string, name: string) => void;
   removeMember: (id: string) => void;
+  // Move a member to another index; the order is the order people are
+  // sorted in on every later step.
+  moveMember: (id: string, toIndex: number) => void;
   setAttribute: (id: string, variable: string, value: AttributeValue | undefined) => void;
   setPosition: (id: string, position: { x: number; y: number } | undefined) => void;
   toggleTie: (a: string, b: string) => void;
@@ -52,6 +55,14 @@ export function Interview({
         members: n.members.filter((m) => m.id !== id),
         ties: n.ties.filter((t) => t.from !== id && t.to !== id),
       })),
+    moveMember: (id, toIndex) =>
+      update((n) => {
+        const members = n.members.filter((m) => m.id !== id);
+        const member = n.members.find((m) => m.id === id);
+        if (!member || toIndex < 0 || toIndex >= n.members.length) return n;
+        members.splice(toIndex, 0, member);
+        return { ...n, members };
+      }),
     setAttribute: (id, variable, value) =>
       updateMember(id, (m) => {
         const attributes = { ...m.attributes };
