@@ -61,5 +61,7 @@ in one network.
 - Moving on from a step while people are still unanswered is allowed, but
   first warns and names who is left. This holds for every step after name
   entry, including the sociogram (people not yet placed).
+- Every step can have a longer instruction text under its question, set in
+  the interview's configuration. So far only the sociogram needs one.
 - One question per screen. Network Canvas pages through the prompts of a
   stage one at a time; the prototype lists each prompt as its own step.

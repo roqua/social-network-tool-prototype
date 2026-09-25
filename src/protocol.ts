@@ -16,10 +16,15 @@ export type Prompt = {
   other?: { label: string; commentVariable: string; commentPrompt: string };
 };
 
+// Every stage can carry a longer instruction text under the question, for
+// explanation that doesn't fit in the question itself. Blank lines separate
+// paragraphs.
+type StageBase = { id: string; label: string; instructions?: string };
+
 export type Stage =
-  | { id: string; type: "names"; label: string; prompt: string; maxMembers: number }
-  | { id: string; type: "bins"; label: string; prompt: Prompt }
-  | { id: string; type: "sociogram"; label: string; prompt: string };
+  | (StageBase & { type: "names"; prompt: string; maxMembers: number })
+  | (StageBase & { type: "bins"; prompt: Prompt })
+  | (StageBase & { type: "sociogram"; prompt: string });
 
 const frequencyOptions: Option[] = [
   { value: 0, label: "Nooit" },
@@ -175,5 +180,8 @@ export const stages: Stage[] = [
     type: "sociogram",
     label: "Verbindingen",
     prompt: "Wie heeft contact met wie?",
+    // Draft wording, to be replaced by the researcher's (see /vragen).
+    instructions:
+      "Zet alle personen in het veld. Zet mensen die veel met elkaar te maken hebben dicht bij elkaar, en mensen die weinig met elkaar te maken hebben verder uit elkaar.\n\nTrek daarna een lijn tussen twee personen als zij contact met elkaar hebben, ook als jij daar niet bij bent.",
   },
 ];

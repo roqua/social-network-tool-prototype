@@ -44,6 +44,13 @@ const questions: Question[] = [
       "In het protocol is er één soort verbinding (“tie”), zonder richting en zonder eigenschappen. De vraag luidt “Wie heeft contact met wie?”.",
     ask: "Klopt het dat over een verbinding verder niets gevraagd hoeft te worden, zoals hoe goed twee personen elkaar kennen?",
   },
+  {
+    title: "Uitleg bij het sociogram (stap 12)",
+    context:
+      "Elke stap kan onder de vraag een langere uitleg krijgen. Bij het sociogram staat nu een eerste versie die wij zelf hebben geschreven.",
+    ask: "Welke uitleg wil je hier de cliënt geven? En zijn er andere stappen die ook een uitleg nodig hebben?",
+    links: [{ label: "Bekijk stap 12", href: "/netwerk/evaluatie-6-maanden?stage=11" }],
+  },
 ];
 
 export function OpenQuestions() {

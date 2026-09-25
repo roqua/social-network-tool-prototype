@@ -57,6 +57,8 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 }
 
 .prompt { font-size: 1.35rem; margin: 0; max-width: 60ch; }
+.instructions { max-width: 70ch; font-size: 1rem; line-height: 1.5; }
+.instructions p { margin: 0 0 0.5rem; }
 .hint { color: var(--muted); margin: 0; font-size: 0.9rem; }
 .error { color: var(--error); margin: 0; font-size: 0.9rem; }
 input[aria-invalid="true"], .member-list input[aria-invalid="true"] { border-color: var(--error); }

@@ -6,6 +6,7 @@ import { useRef, useState, type DragEvent, type PointerEvent } from "react";
 import type { Stage } from "../protocol";
 import { hasTie, type Member, type Network } from "../network";
 import type { NetworkActions } from "../Interview";
+import { Instructions } from "../Instructions";
 
 const W = 1000;
 const H = 640;
@@ -90,6 +91,7 @@ export function Sociogram({
   return (
     <section>
       <p className="prompt">{stage.prompt}</p>
+      <Instructions stage={stage} />
       <p className="hint">
         Sleep personen het veld in en verplaats ze. Klik op twee personen na elkaar om een verbinding te maken of te verwijderen.
         {selected && <strong> {byId(selected)?.name} is geselecteerd, kies de tweede persoon.</strong>}

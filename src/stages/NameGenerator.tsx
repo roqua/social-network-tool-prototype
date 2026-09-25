@@ -3,6 +3,7 @@ import { ChevronDown, ChevronUp, GripVertical } from "lucide-react";
 import type { Stage } from "../protocol";
 import { isNameTaken, type Network } from "../network";
 import type { NetworkActions } from "../Interview";
+import { Instructions } from "../Instructions";
 
 export function NameGenerator({
   stage,
@@ -31,6 +32,7 @@ export function NameGenerator({
   return (
     <section>
       <p className="prompt">{stage.prompt}</p>
+      <Instructions stage={stage} />
 
       <form
         className="name-form"

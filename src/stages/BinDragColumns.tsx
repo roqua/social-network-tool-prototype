@@ -10,6 +10,7 @@ import { OTHER, type Member } from "../network";
 import type { BinStageProps } from "./BinStage";
 import { Dialog } from "../Dialog";
 import { hotkeyLabel, useNumberHotkeys } from "../useNumberHotkeys";
+import { Instructions } from "../Instructions";
 
 export function BinDragColumns({ stage, network, actions }: BinStageProps) {
   const { prompt } = stage;
@@ -81,6 +82,7 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
   return (
     <section>
       <p className="prompt">{prompt.text}</p>
+      <Instructions stage={stage} />
 
       <div className={`tray ${queue.length === 0 ? "empty" : ""}`} {...dropHandlers(undefined)}>
         {queue.length === 0 ? <span className="hint">Iedereen is ingedeeld.</span> : queue.map((m, i) => chip(m, { draggable: i === 0 }))}
