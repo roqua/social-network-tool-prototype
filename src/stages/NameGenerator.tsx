@@ -1,7 +1,7 @@
 import { useState, type DragEvent } from "react";
 import { ChevronDown, ChevronUp, GripVertical } from "lucide-react";
 import type { Stage } from "../protocol";
-import type { Network } from "../network";
+import { isNameTaken, type Network } from "../network";
 import type { NetworkActions } from "../Interview";
 
 export function NameGenerator({
@@ -18,9 +18,11 @@ export function NameGenerator({
   const [draft, setDraft] = useState("");
   const [dragOver, setDragOver] = useState<number | null>(null);
 
+  const draftTaken = isNameTaken(network, draft);
+
   const add = () => {
     const name = draft.trim();
-    if (!name) return;
+    if (!name || draftTaken) return;
     actions.addMember(name);
     setDraft("");
   };
@@ -42,11 +44,13 @@ export function NameGenerator({
           onChange={(e) => setDraft(e.target.value)}
           placeholder="Naam of omschrijving, bijv. 'Henk' of 'buurvrouw'"
           aria-label="Naam van netwerklid"
+          aria-invalid={draftTaken}
         />
-        <button type="submit" className="primary" disabled={!draft.trim()}>
+        <button type="submit" className="primary" disabled={!draft.trim() || draftTaken}>
           Toevoegen
         </button>
       </form>
+      {draftTaken && <DuplicateHint />}
 
       {network.members.length === 0 ? (
         <p className="hint">
@@ -79,7 +83,12 @@ export function NameGenerator({
               >
                 <GripVertical size={16} className="grip" aria-hidden />
                 <span className="member-index">{i + 1}</span>
-                <input value={m.name} onChange={(e) => actions.renameMember(m.id, e.target.value)} aria-label="Naam" />
+                <input
+                  value={m.name}
+                  onChange={(e) => actions.renameMember(m.id, e.target.value)}
+                  aria-label="Naam"
+                  aria-invalid={isNameTaken(network, m.name, m.id)}
+                />
                 <button className="icon" onClick={() => actions.moveMember(m.id, i - 1)} disabled={i === 0} aria-label={`${m.name} omhoog`}>
                   <ChevronUp size={16} />
                 </button>
@@ -97,8 +106,13 @@ export function NameGenerator({
               </li>
             ))}
           </ol>
+          {network.members.some((m) => isNameTaken(network, m.name, m.id)) && <DuplicateHint />}
         </>
       )}
     </section>
   );
+}
+
+function DuplicateHint() {
+  return <p className="error">Deze naam staat er al. Maak hem uniek, bijv. 'Henk (werk)' en 'Henk (buurman)'.</p>;
 }

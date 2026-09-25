@@ -17,6 +17,9 @@ description such as "buurvrouw"). Carries the answers to the protocol's
 questions about that person (relationship type, contact frequency, the
 perception statements, material support) and a position on the sociogram.
 Has a regular primary key and a UUID; see duplication below for why both.
+Names are unique within a network, ignoring case and surrounding spaces:
+they are how the client tells people apart on every later step. Two people
+called Henk become "Henk (werk)" and "Henk (buurman)".
 The client is not a node: the network is about them, as in Network Canvas,
 which leaves ego out of the sociogram too.
 

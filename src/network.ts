@@ -42,6 +42,13 @@ export function finalizeNetwork(network: SocialNetwork): SocialNetwork {
   return { ...network, status: "final", finalizedAt: new Date().toISOString() };
 }
 
+// Names identify people on every later step, so two people can't share one.
+// "Henk" and "henk " count as the same name.
+export function isNameTaken(network: Network, name: string, exceptId?: string): boolean {
+  const key = name.trim().toLocaleLowerCase();
+  return network.members.some((m) => m.id !== exceptId && m.name.trim().toLocaleLowerCase() === key);
+}
+
 export function hasAnswer(member: Member, prompt: Prompt): boolean {
   return member.attributes[prompt.variable] !== undefined;
 }
