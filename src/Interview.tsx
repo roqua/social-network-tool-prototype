@@ -3,12 +3,14 @@
 // sociogram have one design each. A final network shows the same steps
 // read-only; the actions become no-ops and the stage ignores the pointer.
 
+import { useState } from "react";
 import { stages, type Stage } from "./protocol";
-import { stageProgress, tieKey, type AttributeValue, type Network, type SocialNetwork } from "./network";
+import { membersToDo, stageProgress, tieKey, type AttributeValue, type Network, type SocialNetwork } from "./network";
 import { exampleNames, membersFromNames } from "./demo";
 import { Link, navigate } from "./navigation";
 import { StatusBadge } from "./NetworkIndex";
 import { useSearchParam } from "./useSearchParam";
+import { Dialog } from "./Dialog";
 import { NameGenerator } from "./stages/NameGenerator";
 import { BinDragColumns } from "./stages/BinDragColumns";
 import { Sociogram } from "./stages/Sociogram";
@@ -82,6 +84,11 @@ export function Interview({
 
   const goTo = (i: number) => setStageParam(String(Math.min(Math.max(0, i), stages.length - 1)));
 
+  // Moving on with people left unanswered is allowed, but asks first.
+  const [pendingContinue, setPendingContinue] = useState<(() => void) | null>(null);
+  const toDo = readOnly ? [] : membersToDo(network, stage);
+  const continueTo = (go: () => void) => (toDo.length > 0 ? setPendingContinue(() => go) : go());
+
   return (
     <div className="shell">
       <nav className="sidebar" aria-label="Interviewstappen">
@@ -143,15 +150,38 @@ export function Interview({
             Stap {stageIndex + 1} van {stages.length}
           </span>
           {stageIndex < stages.length - 1 ? (
-            <button className="primary" onClick={() => goTo(stageIndex + 1)} disabled={network.members.length === 0}>
+            <button className="primary" onClick={() => continueTo(() => goTo(stageIndex + 1))} disabled={network.members.length === 0}>
               Volgende →
             </button>
           ) : (
-            <button className="primary" onClick={() => navigate("/")}>
+            <button className="primary" onClick={() => continueTo(() => navigate("/"))}>
               {readOnly ? "Terug naar overzicht" : "Afronden"}
             </button>
           )}
         </footer>
+
+        {pendingContinue && (
+          <Dialog onCancel={() => setPendingContinue(null)}>
+            <h2>Nog niet iedereen is ingedeeld</h2>
+            <p>
+              {new Intl.ListFormat("nl").format(toDo.map((m) => m.name))} {toDo.length === 1 ? "heeft" : "hebben"} nog geen antwoord bij deze
+              stap. Wil je toch verder?
+            </p>
+            <div className="actions">
+              <button onClick={() => setPendingContinue(null)}>Terug</button>
+              <button
+                className="primary"
+                autoFocus
+                onClick={() => {
+                  setPendingContinue(null);
+                  pendingContinue();
+                }}
+              >
+                Toch verder
+              </button>
+            </div>
+          </Dialog>
+        )}
       </main>
 
     </div>

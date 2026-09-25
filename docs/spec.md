@@ -58,5 +58,8 @@ in one network.
   as Network Canvas does. The person is only placed once it is answered;
   cancelling leaves them where they were. The answer shows under the name in
   the column, and placing them in "Anders ..." again edits it.
+- Moving on from a step while people are still unanswered is allowed, but
+  first warns and names who is left. This holds for every step after name
+  entry, including the sociogram (people not yet placed).
 - One question per screen. Network Canvas pages through the prompts of a
   stage one at a time; the prototype lists each prompt as its own step.

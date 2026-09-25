@@ -53,17 +53,22 @@ export function hasAnswer(member: Member, prompt: Prompt): boolean {
   return member.attributes[prompt.variable] !== undefined;
 }
 
-// How many (member, prompt) pairs of a stage are answered, for progress display.
-export function stageProgress(network: Network, stage: Stage): { done: number; total: number } {
-  const n = network.members.length;
+// The members a stage still has to ask about. Name entry has none.
+export function membersToDo(network: Network, stage: Stage): Member[] {
   switch (stage.type) {
     case "names":
-      return { done: n, total: n };
+      return [];
     case "bins":
-      return { done: network.members.filter((m) => hasAnswer(m, stage.prompt)).length, total: n };
+      return network.members.filter((m) => !hasAnswer(m, stage.prompt));
     case "sociogram":
-      return { done: network.members.filter((m) => m.position).length, total: n };
+      return network.members.filter((m) => !m.position);
   }
+}
+
+// How many members of a stage are answered, for progress display.
+export function stageProgress(network: Network, stage: Stage): { done: number; total: number } {
+  const total = network.members.length;
+  return { done: total - membersToDo(network, stage).length, total };
 }
 
 export function tieKey(a: string, b: string): string {

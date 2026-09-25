@@ -5,9 +5,10 @@
 // sorted selects it instead, so the same column click or hotkey re-sorts it.
 // Placing someone in the "other" column asks the follow-up question in a
 // modal; the placement only happens once it is answered.
-import { useEffect, useRef, useState, type DragEvent, type KeyboardEvent, type MouseEvent } from "react";
+import { useState, type DragEvent, type KeyboardEvent, type MouseEvent } from "react";
 import { OTHER, type Member } from "../network";
 import type { BinStageProps } from "./BinStage";
+import { Dialog } from "../Dialog";
 import { hotkeyLabel, useNumberHotkeys } from "../useNumberHotkeys";
 
 export function BinDragColumns({ stage, network, actions }: BinStageProps) {
@@ -43,7 +44,7 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
     setSelectedId((current) => (current === id ? null : id));
   };
 
-  useNumberHotkeys(bins.length, (index) => active && !askingOther && place(active.id, bins[index]!.value));
+  useNumberHotkeys(bins.length, (index) => active && place(active.id, bins[index]!.value));
 
   const dropHandlers = (value: number | typeof OTHER | undefined) => ({
     onDragOver: (e: DragEvent) => e.preventDefault(),
@@ -157,19 +158,10 @@ function OtherDialog({
   onSave: (answer: string) => void;
   onCancel: () => void;
 }) {
-  const ref = useRef<HTMLDialogElement>(null);
   const [answer, setAnswer] = useState(initial);
-  useEffect(() => ref.current?.showModal(), []);
 
   return (
-    <dialog
-      ref={ref}
-      className="other-dialog"
-      onCancel={(e) => {
-        e.preventDefault(); // Escape: let React unmount the dialog instead
-        onCancel();
-      }}
-    >
+    <Dialog onCancel={onCancel}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -188,6 +180,6 @@ function OtherDialog({
           </button>
         </div>
       </form>
-    </dialog>
+    </Dialog>
   );
 }
