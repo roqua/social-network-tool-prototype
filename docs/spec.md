@@ -55,6 +55,8 @@ in one network.
   (intake requirement). Clicking a column and the number keys place a person
   as well, covering the mouse-only gap in Network Canvas.
 - The "Anders ..." category asks a required follow-up in a modal on placement,
-  as Network Canvas does. Not built in the prototype yet.
+  as Network Canvas does. The person is only placed once it is answered;
+  cancelling leaves them where they were. The answer shows under the name in
+  the column, and placing them in "Anders ..." again edits it.
 - One question per screen. Network Canvas pages through the prompts of a
   stage one at a time; the prototype lists each prompt as its own step.

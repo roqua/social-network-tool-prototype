@@ -116,7 +116,18 @@ kbd {
 .column h3 { font-size: 0.85rem; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--border); text-align: center; background: var(--bg); border-radius: 8px 8px 0 0; }
 .column-body { padding: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem; align-items: center; }
 .column-member { display: flex; flex-direction: column; gap: 0.25rem; align-items: center; width: 100%; }
-.comment { width: 100%; font-size: 0.8rem; }
+.comment { font-size: 0.9rem; text-align: center; overflow-wrap: anywhere; }
+
+.other-dialog {
+  width: min(480px, calc(100vw - 2rem)); padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--panel); color: var(--text);
+}
+.other-dialog::backdrop { background: rgb(0 0 0 / 0.35); }
+.other-dialog h2 { font-size: 1.2rem; margin: 0.25rem 0 1rem; }
+.other-dialog textarea { width: 100%; font: inherit; font-size: 1.05rem; box-sizing: border-box; }
+.other-dialog .actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem; }
+.other-dialog button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.other-dialog button.primary:disabled { opacity: 0.5; }
 
 /* Sociogram -------------------------------------------------------------- */
 .sociogram { width: 100%; max-height: 62vh; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; touch-action: none; }
