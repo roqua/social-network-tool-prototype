@@ -22,6 +22,9 @@ they are how the client tells people apart on every later step. Two people
 called Henk become "Henk (werk)" and "Henk (buurman)".
 A network has at most 25 nodes. The maximum belongs in the interview's
 configuration, so a study can set its own.
+A newly named person goes on top of the list, right under the input. The
+list order is the order people come up in on every later step, and it can
+be changed by hand.
 The client is not a node: the network is about them, as in Network Canvas,
 which leaves ego out of the sociogram too.
 

@@ -44,10 +44,11 @@ export function Interview({
     update((n) => ({ ...n, members: n.members.map((m) => (m.id === id ? fn(m) : m)) }));
 
   const actions: NetworkActions = {
+    // New names go on top, right under the input, so the client sees what they just added.
     addMember: (name) =>
       update((n) => ({
         ...n,
-        members: [...n.members, { id: `m${Date.now().toString(36)}${n.members.length}`, name, attributes: {} }],
+        members: [{ id: `m${Date.now().toString(36)}${n.members.length}`, name, attributes: {} }, ...n.members],
       })),
     renameMember: (id, name) => updateMember(id, (m) => ({ ...m, name })),
     removeMember: (id) =>
