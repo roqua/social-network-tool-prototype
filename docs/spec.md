@@ -20,6 +20,8 @@ Has a regular primary key and a UUID; see duplication below for why both.
 Names are unique within a network, ignoring case and surrounding spaces:
 they are how the client tells people apart on every later step. Two people
 called Henk become "Henk (werk)" and "Henk (buurman)".
+A network has at most 25 nodes. The maximum belongs in the interview's
+configuration, so a study can set its own.
 The client is not a node: the network is about them, as in Network Canvas,
 which leaves ego out of the sociogram too.
 

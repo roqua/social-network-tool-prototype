@@ -17,7 +17,7 @@ export type Prompt = {
 };
 
 export type Stage =
-  | { id: string; type: "names"; label: string; prompt: string }
+  | { id: string; type: "names"; label: string; prompt: string; maxMembers: number }
   | { id: string; type: "bins"; label: string; prompt: Prompt }
   | { id: string; type: "sociogram"; label: string; prompt: string };
 
@@ -44,6 +44,7 @@ export const stages: Stage[] = [
     label: "Netwerkleden",
     prompt:
       "Benoem de belangrijkste mensen in je leven. Denk aan mensen met wie je regelmatig contact hebt en ook aan mensen waarmee je dat niet hebt, maar met wie je wel contact zou kunnen opnemen.",
+    maxMembers: 25,
   },
   {
     id: "relationship",

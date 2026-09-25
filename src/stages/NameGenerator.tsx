@@ -19,10 +19,11 @@ export function NameGenerator({
   const [dragOver, setDragOver] = useState<number | null>(null);
 
   const draftTaken = isNameTaken(network, draft);
+  const full = network.members.length >= stage.maxMembers;
 
   const add = () => {
     const name = draft.trim();
-    if (!name || draftTaken) return;
+    if (!name || draftTaken || full) return;
     actions.addMember(name);
     setDraft("");
   };
@@ -45,12 +46,14 @@ export function NameGenerator({
           placeholder="Naam of omschrijving, bijv. 'Henk' of 'buurvrouw'"
           aria-label="Naam van netwerklid"
           aria-invalid={draftTaken}
+          disabled={full}
         />
-        <button type="submit" className="primary" disabled={!draft.trim() || draftTaken}>
+        <button type="submit" className="primary" disabled={!draft.trim() || draftTaken || full}>
           Toevoegen
         </button>
       </form>
       {draftTaken && <DuplicateHint />}
+      {full && <p className="hint">Het maximum van {stage.maxMembers} personen is bereikt.</p>}
 
       {network.members.length === 0 ? (
         <p className="hint">
