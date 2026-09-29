@@ -7,6 +7,8 @@ import type { Stage } from "../protocol";
 import { hasTie, type Member, type Network } from "../network";
 import type { NetworkActions } from "../Interview";
 import { Instructions } from "../Instructions";
+import { colorScale, memberColor } from "../colors";
+import { Legend } from "../Legend";
 
 const W = 1000;
 const H = 640;
@@ -40,6 +42,10 @@ export function Sociogram({
   const placed = network.members.filter((m): m is Member & { position: { x: number; y: number } } => !!m.position);
   const unplaced = network.members.filter((m) => !m.position);
   const byId = (id: string) => network.members.find((m) => m.id === id);
+  const scale = colorScale(stage.colorBy);
+  const color = (m: Member) => (scale ? memberColor(scale, m) : undefined);
+  // With a colour scale, people without an answer are drawn hollow.
+  const noValue = (m: Member) => (scale && !color(m) ? "no-value" : "");
 
   // Convert a screen point to normalised canvas coordinates.
   const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -116,7 +122,7 @@ export function Sociogram({
         {placed.map((m) => (
           <g
             key={m.id}
-            className={`node ${selected === m.id ? "selected" : ""}`}
+            className={`node ${selected === m.id ? "selected" : ""} ${noValue(m)}`}
             transform={`translate(${m.position.x * W} ${m.position.y * H})`}
             tabIndex={0}
             role="button"
@@ -133,11 +139,13 @@ export function Sociogram({
               e.preventDefault();
             }}
           >
-            <circle r={R} />
+            <circle r={R} style={{ fill: color(m) }} />
             <text dy="0.35em">{m.name}</text>
           </g>
         ))}
       </svg>
+
+      {scale && <Legend scale={scale} members={network.members} />}
 
       {unplaced.length > 0 && (
         <div className="tray">
@@ -145,7 +153,8 @@ export function Sociogram({
           {unplaced.map((m) => (
             <button
               key={m.id}
-              className="chip"
+              className={`chip ${noValue(m)}`}
+              style={{ background: color(m) }}
               draggable
               onDragStart={(e) => e.dataTransfer.setData("text/plain", m.id)}
               onClick={() => actions.setPosition(m.id, defaultPosition(placed.length))}

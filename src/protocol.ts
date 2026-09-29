@@ -5,6 +5,8 @@
 // Variable names and option values match the codebook there, so the data
 // this prototype produces lines up with what the researcher has seen before.
 
+import { OTHER } from "./network";
+
 export type Option = { value: number; label: string };
 
 export type Prompt = {
@@ -19,12 +21,19 @@ export type Prompt = {
 // Every stage can carry a longer instruction text under the question, for
 // explanation that doesn't fit in the question itself. Blank lines separate
 // paragraphs.
-type StageBase = { id: string; label: string; instructions?: string };
+// colorBy names a variable asked on an earlier bins stage; people are
+// coloured by their answer to it.
+type StageBase = { id: string; label: string; instructions?: string; colorBy?: string };
 
 export type Stage =
   | (StageBase & { type: "names"; prompt: string; maxMembers: number })
   | (StageBase & { type: "bins"; prompt: Prompt })
   | (StageBase & { type: "sociogram"; prompt: string });
+
+// The bins of a prompt: its options in order, then the "other" bin if it has one.
+export function binsOf(prompt: Prompt): { value: number | typeof OTHER; label: string }[] {
+  return [...prompt.options, ...(prompt.other ? [{ value: OTHER as typeof OTHER, label: prompt.other.label }] : [])];
+}
 
 const frequencyOptions: Option[] = [
   { value: 0, label: "Nooit" },
@@ -80,6 +89,7 @@ export const stages: Stage[] = [
     id: "duration",
     type: "bins",
     label: "Duur van de relatie",
+    colorBy: "relationship",
     prompt: {
       variable: "relationship_duration",
       text: "Hoe lang kennen jullie elkaar al?",
@@ -94,6 +104,7 @@ export const stages: Stage[] = [
     id: "contact_f2f",
     type: "bins",
     label: "Face-to-face contact",
+    colorBy: "relationship",
     prompt: {
       variable: "contact_freq_f2f",
       text: "Hoe vaak heb je face to face contact met deze persoon?",
@@ -104,6 +115,7 @@ export const stages: Stage[] = [
     id: "contact_digital",
     type: "bins",
     label: "Digitaal contact",
+    colorBy: "relationship",
     prompt: {
       variable: "contact_freq_digital",
       text: "Hoe vaak heb je via digitale apparaten contact met deze persoon?",
@@ -114,6 +126,7 @@ export const stages: Stage[] = [
     id: "discuss_personal",
     type: "bins",
     label: "Persoonlijke zaken",
+    colorBy: "relationship",
     prompt: {
       variable: "discuss_personal",
       text: "Ik bespreek persoonlijke zaken met deze persoon.",
@@ -124,6 +137,7 @@ export const stages: Stage[] = [
     id: "emotional_support",
     type: "bins",
     label: "Emotionele steun",
+    colorBy: "relationship",
     prompt: {
       variable: "emotional_support",
       text: "Deze persoon ondersteunt me wanneer ik emotionele steun nodig heb (bijv. troost, sympathie en aanmoediging).",
@@ -136,6 +150,7 @@ export const stages: Stage[] = [
     id: "be_myself",
     type: "bins",
     label: "Mezelf zijn",
+    colorBy: "relationship",
     prompt: {
       variable: "be_myself",
       text: "Ik kan mezelf zijn bij deze persoon.",
@@ -146,6 +161,7 @@ export const stages: Stage[] = [
     id: "energy_cost",
     type: "bins",
     label: "Kost energie",
+    colorBy: "relationship",
     prompt: {
       variable: "energy_cost",
       text: "Tijd doorbrengen met deze persoon kost me energie.",
@@ -156,6 +172,7 @@ export const stages: Stage[] = [
     id: "energy_give",
     type: "bins",
     label: "Geeft energie",
+    colorBy: "relationship",
     prompt: {
       variable: "energy_give",
       text: "Tijd doorbrengen met deze persoon geeft me energie.",
@@ -166,6 +183,7 @@ export const stages: Stage[] = [
     id: "material",
     type: "bins",
     label: "Praktische steun",
+    colorBy: "relationship",
     prompt: {
       variable: "material_support",
       text: "Deze persoon geeft mij praktische of materiële ondersteuning.",
@@ -179,9 +197,15 @@ export const stages: Stage[] = [
     id: "connections",
     type: "sociogram",
     label: "Verbindingen",
+    colorBy: "relationship",
     prompt: "Wie heeft contact met wie?",
     // Draft wording, to be replaced by the researcher's (see /vragen).
     instructions:
       "Zet alle personen in het veld. Zet mensen die veel met elkaar te maken hebben dicht bij elkaar, en mensen die weinig met elkaar te maken hebben verder uit elkaar.\n\nTrek daarna een lijn tussen twee personen als zij contact met elkaar hebben, ook als jij daar niet bij bent.",
   },
 ];
+
+// The bins stage that asks a variable, so other stages can refer to its answers.
+export function stageAsking(variable: string): Extract<Stage, { type: "bins" }> | undefined {
+  return stages.find((s): s is Extract<Stage, { type: "bins" }> => s.type === "bins" && s.prompt.variable === variable);
+}

@@ -63,5 +63,11 @@ in one network.
   entry, including the sociogram (people not yet placed).
 - Every step can have a longer instruction text under its question, set in
   the interview's configuration. So far only the sociogram needs one.
+- Every step after the relationship question colours people by their
+  relationship type, on the columns as well as the sociogram, with a legend
+  of the categories in use (researcher's request). People without an answer
+  are drawn hollow. Which question a step colours by is set per step in the
+  interview's configuration; the categories and their order come from that
+  question, so no colours need to be configured.
 - One question per screen. Network Canvas pages through the prompts of a
   stage one at a time; the prototype lists each prompt as its own step.

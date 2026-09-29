@@ -138,6 +138,13 @@ kbd {
 .sociogram .node.selected circle, .sociogram .node:focus circle { stroke: var(--accent); stroke-width: 4; }
 .sociogram .node:focus { outline: none; }
 .sociogram .node text { fill: #fff; font-size: 14px; text-anchor: middle; pointer-events: none; font-weight: 500; }
+.sociogram .node.no-value circle { fill: var(--panel); stroke: var(--muted); stroke-dasharray: 4 3; }
+.sociogram .node.no-value text { fill: var(--text); }
+.chip.no-value { background: var(--panel); color: var(--text); border: 2px dashed var(--muted); }
+.legend { list-style: none; padding: 0; margin: 0.5rem 0 0; display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; font-size: 0.9rem; }
+.legend li { display: flex; align-items: center; gap: 0.4rem; }
+.legend .swatch { width: 0.9rem; height: 0.9rem; border-radius: 50%; flex: none; }
+.legend .swatch.no-value { background: var(--panel); border: 2px dashed var(--muted); box-sizing: border-box; }
 .ties ul { list-style: none; padding: 0; margin: 0.5rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .ties li { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 0.25rem 0.25rem 0.25rem 0.75rem; }
 .tie-form { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }

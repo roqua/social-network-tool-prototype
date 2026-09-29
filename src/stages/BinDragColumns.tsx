@@ -8,6 +8,9 @@
 import { useState, type DragEvent, type KeyboardEvent, type MouseEvent } from "react";
 import { OTHER, type Member } from "../network";
 import type { BinStageProps } from "./BinStage";
+import { binsOf } from "../protocol";
+import { colorScale, memberColor } from "../colors";
+import { Legend } from "../Legend";
 import { Dialog } from "../Dialog";
 import { hotkeyLabel, useNumberHotkeys } from "../useNumberHotkeys";
 import { Instructions } from "../Instructions";
@@ -15,10 +18,9 @@ import { Instructions } from "../Instructions";
 export function BinDragColumns({ stage, network, actions }: BinStageProps) {
   const { prompt } = stage;
 
-  const bins: { value: number | typeof OTHER; label: string }[] = [
-    ...prompt.options,
-    ...(prompt.other ? [{ value: OTHER as typeof OTHER, label: prompt.other.label }] : []),
-  ];
+  const bins = binsOf(prompt);
+  const scale = colorScale(stage.colorBy);
+  const color = (m: Member) => (scale ? memberColor(scale, m) : undefined);
   const queue = network.members.filter((m) => m.attributes[prompt.variable] === undefined);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = network.members.find((m) => m.id === selectedId);
@@ -58,7 +60,8 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
   const chip = (m: Member, { draggable = true, placed = false } = {}) => (
     <span
       key={m.id}
-      className={`chip ${draggable ? "" : "dimmed"} ${m.id === selectedId ? "selected" : ""}`}
+      className={`chip ${draggable ? "" : "dimmed"} ${m.id === selectedId ? "selected" : ""} ${scale && !color(m) ? "no-value" : ""}`}
+      style={{ background: color(m) }}
       draggable={draggable}
       onDragStart={(e) => e.dataTransfer.setData("text/plain", m.id)}
       aria-disabled={!draggable}
@@ -130,6 +133,7 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
           );
         })}
       </div>
+      {scale && <Legend scale={scale} members={network.members} />}
 
       {askingOther && prompt.other && (
         <OtherDialog
