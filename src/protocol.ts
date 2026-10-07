@@ -7,7 +7,8 @@
 
 import { OTHER } from "./network";
 
-export type Option = { value: number; label: string };
+// color is only needed on a question other steps colour people by.
+export type Option = { value: number; label: string; color?: string };
 
 export type Prompt = {
   variable: string;
@@ -15,7 +16,7 @@ export type Prompt = {
   options: Option[];
   // Network Canvas' "other" bin: an extra category that asks for a free-text
   // comment stored in a second variable.
-  other?: { label: string; commentVariable: string; commentPrompt: string };
+  other?: { label: string; color?: string; commentVariable: string; commentPrompt: string };
 };
 
 // Every stage can carry a longer instruction text under the question, for
@@ -31,8 +32,9 @@ export type Stage =
   | (StageBase & { type: "sociogram"; prompt: string });
 
 // The bins of a prompt: its options in order, then the "other" bin if it has one.
-export function binsOf(prompt: Prompt): { value: number | typeof OTHER; label: string }[] {
-  return [...prompt.options, ...(prompt.other ? [{ value: OTHER as typeof OTHER, label: prompt.other.label }] : [])];
+export function binsOf(prompt: Prompt): { value: number | typeof OTHER; label: string; color?: string }[] {
+  const { other } = prompt;
+  return [...prompt.options, ...(other ? [{ value: OTHER as typeof OTHER, label: other.label, color: other.color }] : [])];
 }
 
 const frequencyOptions: Option[] = [
@@ -67,19 +69,22 @@ export const stages: Stage[] = [
     prompt: {
       variable: "relationship",
       text: "Wat is je relatie met deze persoon?",
+      // The researcher's colour scheme: shades of blue for family, red to
+      // yellow from partner to care professional, neutral for anything else.
       options: [
-        { value: 0, label: "kind" },
-        { value: 1, label: "partner" },
-        { value: 2, label: "ouder" },
-        { value: 3, label: "broer of zus" },
-        { value: 4, label: "ander familielid" },
-        { value: 5, label: "vriend" },
-        { value: 6, label: "collega" },
-        { value: 7, label: "kennis" },
-        { value: 8, label: "begeleider / behandelaar" },
+        { value: 0, label: "kind", color: "#264B9A" },
+        { value: 1, label: "partner", color: "#A50026" },
+        { value: 2, label: "ouder", color: "#4A7BB7" },
+        { value: 3, label: "broer of zus", color: "#6EA6CD" },
+        { value: 4, label: "ander familielid", color: "#98CAE1" },
+        { value: 5, label: "vriend", color: "#DD3D2D" },
+        { value: 6, label: "collega", color: "#FDB366" },
+        { value: 7, label: "kennis", color: "#F67E4B" },
+        { value: 8, label: "begeleider / behandelaar", color: "#FEDA8B" },
       ],
       other: {
         label: "Anders ...",
+        color: "#EAECCC",
         commentVariable: "comment",
         commentPrompt: "Wil je een opmerking toevoegen aan deze persoon?",
       },

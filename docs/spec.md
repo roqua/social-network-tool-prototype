@@ -67,7 +67,13 @@ in one network.
   relationship type, on the columns as well as the sociogram, with a legend
   of the categories in use (researcher's request). People without an answer
   are drawn hollow. Which question a step colours by is set per step in the
-  interview's configuration; the categories and their order come from that
-  question, so no colours need to be configured.
+  interview's configuration; the categories, their order and their colours
+  come from that question.
+- Relationship colours (researcher's scheme): shades of blue for family,
+  kind #264B9A, ouder #4A7BB7, broer of zus #6EA6CD, ander familielid
+  #98CAE1; then partner #A50026, vriend #DD3D2D, kennis #F67E4B, collega
+  #FDB366, begeleider #FEDA8B, and #EAECCC for "Anders ...". Names are
+  written in black or white, whichever contrasts more with the colour, since
+  the scheme runs from dark to very pale.
 - One question per screen. Network Canvas pages through the prompts of a
   stage one at a time; the prototype lists each prompt as its own step.

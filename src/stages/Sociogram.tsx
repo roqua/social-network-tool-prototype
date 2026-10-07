@@ -7,7 +7,7 @@ import type { Stage } from "../protocol";
 import { hasTie, type Member, type Network } from "../network";
 import type { NetworkActions } from "../Interview";
 import { Instructions } from "../Instructions";
-import { colorScale, memberColor } from "../colors";
+import { colorScale, memberColor, memberStyle } from "../colors";
 import { Legend } from "../Legend";
 
 const W = 1000;
@@ -138,8 +138,9 @@ export function Sociogram({
               else return;
               e.preventDefault();
             }}
+            style={memberStyle(scale, m)}
           >
-            <circle r={R} style={{ fill: color(m) }} />
+            <circle r={R} />
             <text dy="0.35em">{m.name}</text>
           </g>
         ))}
@@ -154,7 +155,7 @@ export function Sociogram({
             <button
               key={m.id}
               className={`chip ${noValue(m)}`}
-              style={{ background: color(m) }}
+              style={memberStyle(scale, m)}
               draggable
               onDragStart={(e) => e.dataTransfer.setData("text/plain", m.id)}
               onClick={() => actions.setPosition(m.id, defaultPosition(placed.length))}

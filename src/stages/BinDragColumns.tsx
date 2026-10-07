@@ -9,7 +9,7 @@ import { useState, type DragEvent, type KeyboardEvent, type MouseEvent } from "r
 import { OTHER, type Member } from "../network";
 import type { BinStageProps } from "./BinStage";
 import { binsOf } from "../protocol";
-import { colorScale, memberColor } from "../colors";
+import { colorScale, memberColor, memberStyle } from "../colors";
 import { Legend } from "../Legend";
 import { Dialog } from "../Dialog";
 import { hotkeyLabel, useNumberHotkeys } from "../useNumberHotkeys";
@@ -61,7 +61,7 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
     <span
       key={m.id}
       className={`chip ${draggable ? "" : "dimmed"} ${m.id === selectedId ? "selected" : ""} ${scale && !color(m) ? "no-value" : ""}`}
-      style={{ background: color(m) }}
+      style={memberStyle(scale, m)}
       draggable={draggable}
       onDragStart={(e) => e.dataTransfer.setData("text/plain", m.id)}
       aria-disabled={!draggable}
