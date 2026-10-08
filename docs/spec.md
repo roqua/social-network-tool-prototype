@@ -78,3 +78,7 @@ in one network.
   the scheme runs from dark to very pale.
 - One question per screen. Network Canvas pages through the prompts of a
   stage one at a time; the prototype lists each prompt as its own step.
+- The name input has a visible label ("Naam of omschrijving") with the
+  example ("bijv. 'Henk' of 'buurvrouw'") as a hint under it, not as
+  placeholder text: a placeholder disappears as soon as the client starts
+  typing and is hard to read.

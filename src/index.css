@@ -78,7 +78,9 @@ input[type="text"], input:not([type]), textarea, select {
 }
 
 /* Name generator --------------------------------------------------------- */
-.name-form { display: flex; gap: 0.5rem; max-width: 520px; }
+.name-field { display: flex; flex-direction: column; gap: 0.25rem; }
+.name-label { font-weight: 600; }
+.name-form { display: flex; margin-top: 0.25rem; gap: 0.5rem; max-width: 520px; }
 .name-form input { flex: 1; font-size: 1.1rem; }
 .member-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.35rem; max-width: 520px; }
 .member-list li {

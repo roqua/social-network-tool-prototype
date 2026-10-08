@@ -32,26 +32,34 @@ export function NameGenerator({
       <p className="prompt">{stage.prompt}</p>
       <Instructions stage={stage} />
 
-      <form
-        className="name-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          add();
-        }}
-      >
-        <input
-          autoFocus
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          placeholder="Naam of omschrijving, bijv. 'Henk' of 'buurvrouw'"
-          aria-label="Naam van netwerklid"
-          aria-invalid={draftTaken}
-          disabled={full}
-        />
-        <button type="submit" className="primary" disabled={!draft.trim() || draftTaken || full}>
-          Toevoegen
-        </button>
-      </form>
+      <div className="name-field">
+        <label htmlFor="member-name" className="name-label">
+          Naam of omschrijving
+        </label>
+        <p id="member-name-hint" className="hint">
+          Bijv. 'Henk' of 'buurvrouw'
+        </p>
+        <form
+          className="name-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            add();
+          }}
+        >
+          <input
+            id="member-name"
+            autoFocus
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            aria-describedby="member-name-hint"
+            aria-invalid={draftTaken}
+            disabled={full}
+          />
+          <button type="submit" className="primary" disabled={!draft.trim() || draftTaken || full}>
+            Toevoegen
+          </button>
+        </form>
+      </div>
       {draftTaken && <DuplicateHint />}
       {full && <p className="hint">Het maximum van {stage.maxMembers} personen is bereikt.</p>}
 
