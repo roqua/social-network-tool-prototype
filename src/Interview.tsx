@@ -19,9 +19,6 @@ export type NetworkActions = {
   addMember: (name: string) => void;
   renameMember: (id: string, name: string) => void;
   removeMember: (id: string) => void;
-  // Move a member to another index; the order is the order people are
-  // sorted in on every later step.
-  moveMember: (id: string, toIndex: number) => void;
   setAttribute: (id: string, variable: string, value: AttributeValue | undefined) => void;
   setPosition: (id: string, position: { x: number; y: number } | undefined) => void;
   toggleTie: (a: string, b: string) => void;
@@ -46,11 +43,11 @@ export function Interview({
     update((n) => ({ ...n, members: n.members.map((m) => (m.id === id ? fn(m) : m)) }));
 
   const actions: NetworkActions = {
-    // New names go on top, right under the input, so the client sees what they just added.
+    // Members stay in the order they were added; later steps go through them in that order.
     addMember: (name) =>
       update((n) => ({
         ...n,
-        members: [{ id: `m${Date.now().toString(36)}${n.members.length}`, name, attributes: {} }, ...n.members],
+        members: [...n.members, { id: `m${Date.now().toString(36)}${n.members.length}`, name, attributes: {} }],
       })),
     renameMember: (id, name) => updateMember(id, (m) => ({ ...m, name })),
     removeMember: (id) =>
@@ -58,14 +55,6 @@ export function Interview({
         members: n.members.filter((m) => m.id !== id),
         ties: n.ties.filter((t) => t.from !== id && t.to !== id),
       })),
-    moveMember: (id, toIndex) =>
-      update((n) => {
-        const members = n.members.filter((m) => m.id !== id);
-        const member = n.members.find((m) => m.id === id);
-        if (!member || toIndex < 0 || toIndex >= n.members.length) return n;
-        members.splice(toIndex, 0, member);
-        return { ...n, members };
-      }),
     setAttribute: (id, variable, value) =>
       updateMember(id, (m) => {
         const attributes = { ...m.attributes };
