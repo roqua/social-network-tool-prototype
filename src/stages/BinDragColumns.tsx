@@ -33,12 +33,12 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
       return;
     }
     actions.setAttribute(memberId, prompt.variable, value);
-    if (value !== OTHER && prompt.other) actions.setAttribute(memberId, prompt.other.commentVariable, undefined);
+    if (value !== OTHER && prompt.other) actions.setAttribute(memberId, prompt.other.followUpVariable, undefined);
     setSelectedId(null);
   };
   const placeInOther = (memberId: string, answer: string) => {
     actions.setAttribute(memberId, prompt.variable, OTHER);
-    actions.setAttribute(memberId, prompt.other!.commentVariable, answer);
+    actions.setAttribute(memberId, prompt.other!.followUpVariable, answer);
     setAskingOther(null);
     setSelectedId(null);
   };
@@ -124,7 +124,7 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
                   <div key={m.id} className="column-member">
                     {chip(m, { placed: true })}
                     {bin.value === OTHER && prompt.other && (
-                      <span className="comment">{String(m.attributes[prompt.other.commentVariable] ?? "")}</span>
+                      <span className="follow-up">{String(m.attributes[prompt.other.followUpVariable] ?? "")}</span>
                     )}
                   </div>
                 ))}
@@ -139,8 +139,8 @@ export function BinDragColumns({ stage, network, actions }: BinStageProps) {
         <OtherDialog
           key={askingOther.id}
           member={askingOther}
-          question={prompt.other.commentPrompt}
-          initial={String(askingOther.attributes[prompt.other.commentVariable] ?? "")}
+          question={prompt.other.followUpPrompt}
+          initial={String(askingOther.attributes[prompt.other.followUpVariable] ?? "")}
           onSave={(answer) => placeInOther(askingOther.id, answer)}
           onCancel={() => setAskingOther(null)}
         />
@@ -176,7 +176,7 @@ function OtherDialog({
       >
         <p className="hint">{member.name}</p>
         <h2>{question}</h2>
-        <textarea autoFocus rows={3} value={answer} onChange={(e) => setAnswer(e.target.value)} aria-label={question} />
+        <input autoFocus value={answer} onChange={(e) => setAnswer(e.target.value)} aria-label={question} />
         <div className="actions">
           <button type="button" onClick={onCancel}>
             Annuleren

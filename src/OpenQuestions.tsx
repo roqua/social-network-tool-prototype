@@ -11,13 +11,6 @@ type Question = {
 
 const questions: Question[] = [
   {
-    title: "Vervolgvraag bij “Anders ...” (stap 2, Relatie)",
-    context:
-      "In Network Canvas verschijnt na het slepen naar “Anders ...” een venster met de vraag “Wil je een opmerking toevoegen aan deze persoon?”. Dat leest als een optionele, algemene opmerking, maar het antwoord is verplicht en komt in het veld comment terecht.",
-    ask: "Is de bedoeling hier “welke relatie is het dan?” Zo ja, mogen we de vraag zo formuleren?",
-    links: [{ label: "Bekijk stap 2", href: "/netwerk/evaluatie-6-maanden?stage=1" }],
-  },
-  {
     title: "Schaal van “Emotionele steun” (stap 7)",
     context:
       "In het codeboek loopt deze vraag van 1 (Nooit) tot 5 (Bijna altijd). Alle andere frequentievragen lopen van 0 tot 4. Hetzelfde antwoord “Nooit” is daardoor bij de ene vraag een 0 en bij de andere een 1.",

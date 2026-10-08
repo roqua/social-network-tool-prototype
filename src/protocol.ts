@@ -14,9 +14,9 @@ export type Prompt = {
   variable: string;
   text: string;
   options: Option[];
-  // Network Canvas' "other" bin: an extra category that asks for a free-text
-  // comment stored in a second variable.
-  other?: { label: string; color?: string; commentVariable: string; commentPrompt: string };
+  // Network Canvas' "other" bin: an extra category that asks a free-text
+  // follow-up question, stored in a second variable.
+  other?: { label: string; color?: string; followUpVariable: string; followUpPrompt: string };
 };
 
 // Every stage can carry a longer instruction text under the question, for
@@ -85,8 +85,8 @@ export const stages: Stage[] = [
       other: {
         label: "Anders ...",
         color: "#EAECCC",
-        commentVariable: "comment",
-        commentPrompt: "Wil je een opmerking toevoegen aan deze persoon?",
+        followUpVariable: "relationship_other",
+        followUpPrompt: "Welke relatie heb je met deze persoon?",
       },
     },
   },
